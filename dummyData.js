@@ -1,4 +1,4 @@
-use dummyStore;
+use heroku_bw74ps3m;
 var bulk = db.store.initializeUnorderedBulkOp();
 bulk.insert(   { _id: 1, title: "Apple iMac Pro", image: "http:://example.com/p1.jpg", price: 5000, rating: 4 });
 bulk.insert(   { _id: 2, title: "Google Pixel 2", image: "http:://example.com/p2.jpg", price: 2000, rating: 5});

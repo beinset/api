@@ -1,1 +1,1 @@
-web: rest-and-go
+web: sigfox-api

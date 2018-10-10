@@ -3,8 +3,9 @@ package store
 import (
 	"fmt"
 	"log"
-	"gopkg.in/mgo.v2"
 	"strings"
+
+	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -12,22 +13,22 @@ import (
 type Repository struct{}
 
 // SERVER the DB server
-const SERVER = "mongodb://gautam:gautam@ds157233.mlab.com:57233/dummystore"
+const SERVER = "mongodb://admin:MacCollector2018@ds151892.mlab.com:51892/heroku_bw74ps3m"
 
 // DBNAME the name of the DB instance
-const DBNAME = "dummyStore"
+const DBNAME = "heroku_bw74ps3m"
 
 // COLLECTION is the name of the collection in DB
-const COLLECTION = "store"
+const COLLECTION = "sigfox"
 
-var productId = 10;
+var productId = 10
 
 // GetProducts returns the list of Products
 func (r Repository) GetProducts() Products {
 	session, err := mgo.Dial(SERVER)
 
 	if err != nil {
-	 	fmt.Println("Failed to establish connection to Mongo server:", err)
+		fmt.Println("Failed to establish connection to Mongo server:", err)
 	}
 
 	defer session.Close()
@@ -36,7 +37,7 @@ func (r Repository) GetProducts() Products {
 	results := Products{}
 
 	if err := c.Find(nil).All(&results); err != nil {
-	  	fmt.Println("Failed to write results:", err)
+		fmt.Println("Failed to write results:", err)
 	}
 
 	return results
@@ -47,7 +48,7 @@ func (r Repository) GetProductById(id int) Product {
 	session, err := mgo.Dial(SERVER)
 
 	if err != nil {
-	 	fmt.Println("Failed to establish connection to Mongo server:", err)
+		fmt.Println("Failed to establish connection to Mongo server:", err)
 	}
 
 	defer session.Close()
@@ -55,10 +56,10 @@ func (r Repository) GetProductById(id int) Product {
 	c := session.DB(DBNAME).C(COLLECTION)
 	var result Product
 
-	fmt.Println("ID in GetProductById", id);
+	fmt.Println("ID in GetProductById", id)
 
 	if err := c.FindId(id).One(&result); err != nil {
-	  	fmt.Println("Failed to write result:", err)
+		fmt.Println("Failed to write result:", err)
 	}
 
 	return result
@@ -69,7 +70,7 @@ func (r Repository) GetProductsByString(query string) Products {
 	session, err := mgo.Dial(SERVER)
 
 	if err != nil {
-	 	fmt.Println("Failed to establish connection to Mongo server:", err)
+		fmt.Println("Failed to establish connection to Mongo server:", err)
 	}
 
 	defer session.Close()
@@ -81,14 +82,14 @@ func (r Repository) GetProductsByString(query string) Products {
 	qs := strings.Split(query, " ")
 	and := make([]bson.M, len(qs))
 	for i, q := range qs {
-    	and[i] = bson.M{"title": bson.M{
-        	"$regex": bson.RegEx{Pattern: ".*" + q + ".*", Options: "i"},
-    	}}
+		and[i] = bson.M{"title": bson.M{
+			"$regex": bson.RegEx{Pattern: ".*" + q + ".*", Options: "i"},
+		}}
 	}
 	filter := bson.M{"$and": and}
 
 	if err := c.Find(&filter).Limit(5).All(&result); err != nil {
-	  	fmt.Println("Failed to write result:", err)
+		fmt.Println("Failed to write result:", err)
 	}
 
 	return result
@@ -118,7 +119,7 @@ func (r Repository) UpdateProduct(product Product) bool {
 	defer session.Close()
 
 	err = session.DB(DBNAME).C(COLLECTION).UpdateId(product.ID, product)
-	
+
 	if err != nil {
 		log.Fatal(err)
 		return false
