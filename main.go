@@ -4,14 +4,14 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
-	"sigfox-api/store"
+
+	"github.com/beinset/api/store"
 
 	"github.com/gorilla/handlers"
 )
 
 func main() {
-	port := os.Getenv("PORT")
+	port := "3000"
 
 	if port == "" {
 		log.Fatal("$PORT must be set")
